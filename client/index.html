@@ -16,14 +16,21 @@
       [v-cloak] {
         display: none;
       }
+      .top-buffer {
+        margin-top: 24px;
+      }
+      .top-buffer-card {
+        margin-top: 15px;
+      }
+    </style>
     </style>
   </head>
   <body>
     <div id="app" class="container pt-3" v-cloak>
       <h1>REST API</h1>
 
-      <form class="form-inline mb-3" @submit.prevent="createContact">
-        <div class="form-group mr-5">
+      <form class="row row-cols-lg-auto" @submit.prevent="createContact">
+        <div class="col">
           <label for="name" class="mr-3">Имя</label>
           <input
             type="text"
@@ -32,7 +39,7 @@
             v-model="form.name"
           />
         </div>
-        <div class="form-group mr-5">
+        <div class="col">
           <label for="value" class="mr-3">Значение</label>
           <input
             type="text"
@@ -41,12 +48,15 @@
             v-model="form.value"
           />
         </div>
-        <button class="btn btn-primary" type="submit" :disabled="!canCreate">
+        <button class="btn btn-primary  top-buffer" type="submit" :disabled="!canCreate">
           Создать
         </button>
       </form>
-      <div v-if="contacts.length">
-        <div class="card md-3" v-for="contact in contacts">
+      <div v-if="loading">
+        <loader />
+      </div>
+      <div v-else-if="contacts.length">
+        <div class="card md-3 top-buffer-card w-50" v-for="contact in contacts">
           <div class="card-body">
             <h5
               class="card-title"
