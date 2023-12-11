@@ -12,7 +12,9 @@ const CONTACTS = [
 ];
 
 app.get("/api/contacts", (req, res) => {
-  res.status(200).json(CONTACTS);
+  setTimeout(() => {
+    res.status(200).json(CONTACTS);
+  }, 500);
 });
 
 app.use(express.static(path.resolve(__dirname, "client")));
