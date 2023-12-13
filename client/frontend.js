@@ -1,10 +1,12 @@
 import Vue from "https://cdn.jsdelivr.net/npm/vue@2.7.8/dist/vue.esm.browser.js";
 Vue.component("loader", {
-  template: ` <div style= "display: flex; justify-content: center; align-items: center">
-                <div class="spinner-border" role= "status">
-                  <span class= "sr-only"></span>
-                </div>
-              </div>
+  template: ` <div  
+    style = "position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);">
+  <div class="spinner-border" role="status">
+    <span class="visually-hidden">Загрузка...</span>
+  </div>
+</div>
   `,
 });
 new Vue({
@@ -25,19 +27,22 @@ new Vue({
     },
   },
   methods: {
-    createContact() {
+    async createContact() {
       const { ...contact } = this.form;
-      console.log(contact);
-      this.contacts.push({ ...contact, id: Date.now(), marked: false });
-
+      const newContact = await request("/api/contacts", "POST", contact);
+      this.contacts.push(newContact);
       this.form.name = this.form.value = "";
     },
-    markContact(id) {
-      console.log(id);
+    async markContact(id) {
       const contact = this.contacts.find((c) => c.id === id);
-      contact.marked = true;
+      const updated = await request(`/api/contacts/${id}`, "PUT", {
+        ...contact,
+        marked: true,
+      });
+      contact.marked = updated.marked;
     },
-    removeContact(id) {
+    async removeContact(id) {
+      await request(`/api/contacts/${id}`, "DELETE");
       this.contacts = this.contacts.filter((c) => c.id !== id);
     },
   },
@@ -54,7 +59,7 @@ async function request(url, method = "GET", data = null) {
     let body;
 
     if (data) {
-      headera["Content-Type"] = "application/json";
+      headers["Content-Type"] = "application/json";
       body = JSON.stringify(data);
     }
 

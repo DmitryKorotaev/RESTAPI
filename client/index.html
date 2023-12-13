@@ -23,7 +23,6 @@
         margin-top: 15px;
       }
     </style>
-    </style>
   </head>
   <body>
     <div id="app" class="container pt-3" v-cloak>
@@ -48,7 +47,11 @@
             v-model="form.value"
           />
         </div>
-        <button class="btn btn-primary  top-buffer" type="submit" :disabled="!canCreate">
+        <button
+          class="btn btn-primary top-buffer"
+          type="submit"
+          :disabled="!canCreate"
+        >
           Создать
         </button>
       </form>
